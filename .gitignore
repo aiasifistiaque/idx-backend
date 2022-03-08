@@ -1,0 +1,15 @@
+/node_modules
+/docs
+/client-docs
+
+.env
+
+env
+
+/env
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
