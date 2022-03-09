@@ -1,66 +1,34 @@
-import Joi from 'joi';
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 
 const schema = new mongoose.Schema(
 	{
-		name: {
+		user: {
 			type: String,
 			required: true,
-			minlength: 5,
-			maxlength: 50,
 			trim: true,
+			default: 'test@identrix.io',
 		},
-		email: {
+		credentialType: {
 			type: String,
 			required: true,
-			minlength: 5,
-			maxlength: 255,
-			unique: true,
 			trim: true,
 		},
-		phone: {
+		status: {
 			type: String,
-			minlength: 8,
-			maxlength: 255,
+			required: true,
 			trim: true,
+			default: 'pending',
 		},
-
-		resetCode: {
+		token: {
 			type: String,
+			required: true,
 		},
-
-		wishlist: [],
-
-		address: String,
-		city: String,
-		postalCode: String,
-		country: String,
-
-		role: { type: String, default: 'user' },
-		password: { type: String, required: true, minlength: 5, maxlength: 1024 },
 	},
 	{
 		timestamps: true,
 	}
 );
 
-schema.methods.generateAuthToken = function () {
-	const token = jwt.sign(
-		{ _id: this._id, name: this.name, role: this.role },
-		process.env.JWT_PRIVATE_KEY
-	);
-	return token;
-};
+const Credential = mongoose.model('Credential', schema);
 
-export const User = mongoose.model('Cred', schema);
-
-export function validate(user) {
-	const schema = Joi.object({
-		name: Joi.string().min(2).max(50).required(),
-		email: Joi.string().min(5).max(255).required().email(),
-		password: Joi.string().min(5).max(255).required(),
-		role: Joi.string(),
-	});
-	return schema.validate(user);
-}
+export default Credential;
