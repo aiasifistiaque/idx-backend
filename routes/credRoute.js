@@ -32,8 +32,9 @@ const addCred = asyncHandler(async (req, res) => {
 });
 
 const getCreds = asyncHandler(async (req, res) => {
+	const status = req.query.status ? { status: req.query.status } : {};
 	try {
-		const credentials = await Credential.find()
+		const credentials = await Credential.find(status)
 			.select('-token')
 			.sort('-createdAt');
 		res.status(201).json(credentials);
