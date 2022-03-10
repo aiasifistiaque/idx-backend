@@ -46,10 +46,21 @@ const getCreds = asyncHandler(async (req, res) => {
 
 const getCred = asyncHandler(async (req, res) => {
 	try {
-		const credentials = await Credential.findById(req.params.id)
-			.select('-token')
-			.sort('-createdAt');
+		const credentials = await Credential.findById(req.params.id);
+
 		res.status(201).json(credentials);
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ status: 'error' });
+	}
+});
+
+const changeCred = asyncHandler(async (req, res) => {
+	try {
+		const credential = await Credential.findById(req.params.id);
+		credential.status = req.body.status;
+		const saved = await credential.save();
+		res.status(201).json(saved);
 	} catch (e) {
 		console.log(e);
 		res.status(500).json({ status: 'error' });
@@ -59,5 +70,6 @@ const getCred = asyncHandler(async (req, res) => {
 router.post('/', addCred);
 router.get('/', getCreds);
 router.get('/:id', getCred);
+router.put('/:id', changeCred);
 
 export default router;
