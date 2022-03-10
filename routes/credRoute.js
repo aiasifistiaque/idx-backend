@@ -44,7 +44,20 @@ const getCreds = asyncHandler(async (req, res) => {
 	}
 });
 
+const getCred = asyncHandler(async (req, res) => {
+	try {
+		const credentials = await Credential.findById(req.params.id)
+			.select('-token')
+			.sort('-createdAt');
+		res.status(201).json(credentials);
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ status: 'error' });
+	}
+});
+
 router.post('/', addCred);
 router.get('/', getCreds);
+router.get('/:id', getCred);
 
 export default router;
