@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
 import credRoute from './routes/credRoute.js';
+import authRoute from './routes/authRoute.js';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(function (req, res, next) {
 //routes
 // app.use('/api/auth', authRoute);
 app.use('/issue', credRoute);
+app.use('/auth', authRoute);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
