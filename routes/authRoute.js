@@ -43,12 +43,10 @@ router.post('/register', async (req, res) => {
 		await user.save();
 
 		const token = user.generateAuthToken();
-		res
-			.status(200)
-			.header('x-auth-token', token)
-			.send(_.pick(user, ['_id', 'name', 'email', 'role']));
+		res.status(200).header('x-auth-token', token).send(`Bearer ${token}`);
 	} catch (e) {
-		res.status(500).send(e);
+		console.log(e);
+		res.status(500).send('Internal Server Error');
 	}
 });
 
