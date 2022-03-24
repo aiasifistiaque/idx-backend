@@ -18,10 +18,11 @@ const addCred = asyncHandler(async (req, res) => {
 		});
 		const token = issueJwt(simplified);
 		const newCred = new Credential({
-			user: 'test@identrix.io',
+			issuer: 'test@identrix.io',
 			credentialType: req.body.template.name,
 			status: 'pending',
 			token: token,
+			user: req.body.user,
 		});
 		const saved = await newCred.save();
 		res.status(201).json({ body: simplified, token });

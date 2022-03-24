@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema(
 	{
-		user: {
+		issuer: {
 			type: String,
 			required: true,
 			trim: true,
@@ -18,6 +18,10 @@ const schema = new mongoose.Schema(
 			required: true,
 			trim: true,
 			default: 'pending',
+		},
+		user: {
+			type: String,
+			required: true,
 		},
 		token: {
 			type: String,
