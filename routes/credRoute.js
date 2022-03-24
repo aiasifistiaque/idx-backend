@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import Credential from '../models/credentialsModel.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -45,6 +46,21 @@ const getCreds = asyncHandler(async (req, res) => {
 	}
 });
 
+const getUserCreds = asyncHandler(async (req, res) => {
+	const status = req.query.status
+		? { status: req.query.status, user: req.user.email }
+		: { user: req.user.email };
+	try {
+		const credentials = await Credential.find(status)
+			.select('-token')
+			.sort('-createdAt');
+		res.status(201).json(credentials);
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ status: 'error' });
+	}
+});
+
 const getCred = asyncHandler(async (req, res) => {
 	try {
 		const credentials = await Credential.findById(req.params.id);
@@ -70,6 +86,7 @@ const changeCred = asyncHandler(async (req, res) => {
 
 router.post('/', addCred);
 router.get('/', getCreds);
+router.get('/user', protect, getUserCreds);
 router.get('/:id', getCred);
 router.put('/:id', changeCred);
 
