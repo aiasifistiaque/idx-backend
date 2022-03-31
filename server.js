@@ -6,6 +6,8 @@ import cors from 'cors';
 import path from 'path';
 import credRoute from './routes/credRoute.js';
 import authRoute from './routes/authRoute.js';
+import templateRoute from './routes/templateRoute.js';
+import verificationServiceRoute from './routes/verificationServiceRoute.js';
 
 dotenv.config();
 
@@ -31,8 +33,10 @@ app.use(function (req, res, next) {
 
 //routes
 // app.use('/api/auth', authRoute);
+app.use('/template', templateRoute);
 app.use('/issue', credRoute);
 app.use('/auth', authRoute);
+app.use('/verify', verificationServiceRoute);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
