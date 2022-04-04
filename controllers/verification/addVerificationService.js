@@ -16,6 +16,7 @@ const addVerificationService = asyncHandler(async (req, res) => {
 			attributes,
 		});
 		const saved = await newItem.save();
+
 		res.status(201).json(saved);
 	} catch (e) {
 		console.log(e);

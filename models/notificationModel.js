@@ -6,29 +6,26 @@ const schema = new mongoose.Schema(
 			type: String,
 			required: true,
 			trim: true,
-			default: 'test@identrix.io',
 		},
-		template: {
-			type: mongoose.Schema.Types.ObjectId,
-			required: true,
-			ref: 'Template',
-		},
-		credentialType: {
+		type: {
 			type: String,
 			required: true,
 			trim: true,
+			default: 'assign',
 		},
+
 		status: {
 			type: String,
 			required: true,
 			trim: true,
 			default: 'pending',
 		},
+
 		user: {
 			type: String,
 			required: true,
 		},
-		token: {
+		target: {
 			type: String,
 			required: true,
 		},
@@ -38,6 +35,6 @@ const schema = new mongoose.Schema(
 	}
 );
 
-const Credential = mongoose.model('Credential', schema);
+const Notification = mongoose.model('Notification', schema);
 
-export default Credential;
+export default Notification;

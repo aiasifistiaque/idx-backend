@@ -7,6 +7,7 @@ const getAllCredentials = asyncHandler(async (req, res) => {
 		: { issuer: req.user.email };
 	try {
 		const credentials = await Credential.find(status)
+			.sort('-createdAt')
 			.select('-token')
 			.sort('-createdAt');
 		res.status(201).json(credentials);
