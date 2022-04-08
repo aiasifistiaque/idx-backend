@@ -3,9 +3,9 @@ import Template from '../../models/templateModel.js';
 
 const getAllTemplates = asyncHandler(async (req, res) => {
 	try {
-		const data = await Template.find({ issuer: req.user.email }).sort(
-			'-createdAt'
-		);
+		const data = await Template.find({ issuer: req.user._id })
+			.sort('-createdAt')
+			.populate({ path: 'issuer', select: 'name email' });
 		res.status(201).json(data);
 	} catch (e) {
 		console.log(e);

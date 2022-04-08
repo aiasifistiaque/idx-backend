@@ -2,16 +2,13 @@ import asyncHandler from 'express-async-handler';
 import express from 'express';
 import Datarequest from '../../models/datarequestModel.js';
 
-const getDataRequest = asyncHandler(async (req, res) => {
+const getDataRequests = asyncHandler(async (req, res) => {
 	try {
-		const data = await Datarequest.findById(req.params.id).populate([
-			{
-				path: 'issuer',
-				select: 'name email',
-			},
-			{ path: 'verification' },
-		]);
+		console.log(req.user);
 
+		const data = await Datarequest.find({ user: req.user.email }).sort(
+			'-updatedAt'
+		);
 		res.status(200).json(data);
 	} catch (e) {
 		console.log(e);
@@ -19,4 +16,4 @@ const getDataRequest = asyncHandler(async (req, res) => {
 	}
 });
 
-export default getDataRequest;
+export default getDataRequests;

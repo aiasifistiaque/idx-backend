@@ -3,13 +3,30 @@ import Credential from '../../models/credentialsModel.js';
 
 const getUserCredentials = asyncHandler(async (req, res) => {
 	const status = req.query.status
-		? { status: req.query.status, user: req.user.email }
-		: { user: req.user.email };
+		? {
+				status: req.query.status,
+				user: req.user.email,
+				...(req.query.category && { category: req.query.category }),
+		  }
+		: {
+				user: req.user.email,
+				...(req.query.category && { category: req.query.category }),
+		  };
 	try {
 		const credentials = await Credential.find(status)
-			.select('-token')
+			.populate([
+				{
+					path: 'issuer',
+					select: 'name email',
+				},
+				{
+					path: 'template',
+					select: 'name category',
+				},
+			])
 			.sort('-createdAt');
-		res.status(201).json(credentials);
+
+		res.status(200).json(credentials);
 	} catch (e) {
 		console.log(e);
 		res.status(500).json({ status: 'error' });

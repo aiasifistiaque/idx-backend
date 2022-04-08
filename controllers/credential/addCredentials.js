@@ -17,17 +17,18 @@ const addCredentials = asyncHandler(async (req, res) => {
 		});
 		const token = issueJwt(simplified);
 		const newCred = new Credential({
-			issuer: req.user?.email || 'test',
+			issuer: req.user?._id,
 			credentialType: req.body.template.name,
 			status: 'pending',
 			token: token,
 			user: req.body.user,
 			template: req.body.template._id,
+			category: req.body.template.category,
 		});
 		const saved = await newCred.save();
 		if (saved) {
 			const notification = new Notification({
-				issuer: req.user?.email || 'test',
+				issuer: req.user?._id,
 				type: 'assign',
 				status: 'pending',
 				user: req.body.user,

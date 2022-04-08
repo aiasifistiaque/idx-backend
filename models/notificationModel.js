@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 const schema = new mongoose.Schema(
 	{
 		issuer: {
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
 			required: true,
-			trim: true,
+			ref: 'User',
 		},
 		type: {
 			type: String,

@@ -3,8 +3,8 @@ import Credential from '../../models/credentialsModel.js';
 
 const getAllCredentials = asyncHandler(async (req, res) => {
 	const status = req.query.status
-		? { status: req.query.status, issuer: req.user.email }
-		: { issuer: req.user.email };
+		? { status: req.query.status, issuer: req.user._id }
+		: { issuer: req.user._id };
 	try {
 		const credentials = await Credential.find(status)
 			.sort('-createdAt')

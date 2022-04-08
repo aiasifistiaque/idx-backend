@@ -14,10 +14,9 @@ const attributeSchema = mongoose.Schema(
 const schema = new mongoose.Schema(
 	{
 		issuer: {
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
 			required: true,
-			trim: true,
-			default: 'test@identrix.io',
+			ref: 'User',
 		},
 		name: {
 			type: String,
@@ -29,6 +28,12 @@ const schema = new mongoose.Schema(
 			required: true,
 			trim: true,
 			default: '0.1',
+		},
+		category: {
+			type: String,
+			required: true,
+			trim: true,
+			default: 'Personal',
 		},
 		description: {
 			type: String,

@@ -1,11 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import express from 'express';
 import { User } from '../../models/userModel.js';
-import Credential from '../../models/credentialsModel.js';
 
-const listMyCustomers = asyncHandler(async (req, res) => {
+const getMyDetails = asyncHandler(async (req, res) => {
 	try {
-		const data = await Credential.distinct('user', { issuer: req.user._id });
+		const data = await User.findById(req.user._id).select('-password');
 		res.status(200).json(data);
 	} catch (e) {
 		console.log(e);
@@ -13,4 +12,4 @@ const listMyCustomers = asyncHandler(async (req, res) => {
 	}
 });
 
-export default listMyCustomers;
+export default getMyDetails;

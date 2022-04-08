@@ -3,17 +3,18 @@ import express from 'express';
 import Verificaction from '../../models/verificationModel.js';
 
 const addVerificationService = asyncHandler(async (req, res) => {
-	const { name, endpoint, key, description, attributes } = req.body.data;
-	const issuer = req.user.email;
+	const { name, endpoint, key, description, attributes, template } =
+		req.body.data;
 
 	try {
 		const newItem = new Verificaction({
-			issuer: issuer ? issuer : 'test@identrix.io',
+			issuer: req.user._id,
 			name,
 			description,
 			endpoint,
 			key,
 			attributes,
+			template: template._id,
 		});
 		const saved = await newItem.save();
 

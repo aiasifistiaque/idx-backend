@@ -10,6 +10,8 @@ import templateRoute from './routes/templateRoute.js';
 import verificationServiceRoute from './routes/verificationServiceRoute.js';
 import userRoute from './routes/userRoute.js';
 import notificationRoute from './routes/notificationRoute.js';
+import decodeRoute from './routes/decodeRoute.js';
+import dataRequestRoute from './routes/datarequestRoute.js';
 
 dotenv.config();
 
@@ -41,6 +43,8 @@ app.use('/auth', authRoute);
 app.use('/verify', verificationServiceRoute);
 app.use('/user', userRoute);
 app.use('/notifications', notificationRoute);
+app.use('/decode', decodeRoute);
+app.use('/datarequest', dataRequestRoute);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

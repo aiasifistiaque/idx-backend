@@ -3,17 +3,18 @@ import express from 'express';
 import Template from '../../models/templateModel.js';
 
 const addTemplate = asyncHandler(async (req, res) => {
-	const { name, type, version, description, attributes } = req.body.data;
-	console.log(req.body.data);
+	const { name, type, version, description, attributes, category } =
+		req.body.data;
 	const user = req.user;
 	try {
 		const newTemplate = new Template({
-			issuer: user.email,
+			issuer: user._id,
 			name,
 			type,
 			description,
 			attributes,
 			version,
+			category,
 		});
 		const saved = await newTemplate.save();
 		res.status(201).json(saved);

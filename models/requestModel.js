@@ -3,10 +3,9 @@ import mongoose from 'mongoose';
 const schema = new mongoose.Schema(
 	{
 		issuer: {
-			type: String,
+			type: mongoose.Schema.Types.ObjectId,
 			required: true,
-			trim: true,
-			default: 'test@identrix.io',
+			ref: 'User',
 		},
 		user: {
 			type: String,
