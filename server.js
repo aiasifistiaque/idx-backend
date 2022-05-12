@@ -12,6 +12,10 @@ import userRoute from './routes/userRoute.js';
 import notificationRoute from './routes/notificationRoute.js';
 import decodeRoute from './routes/decodeRoute.js';
 import dataRequestRoute from './routes/datarequestRoute.js';
+import qrRoute from './routes/qrRoute.js';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import { onSocketConnection } from './socket/index.js';
 
 dotenv.config();
 
@@ -45,10 +49,39 @@ app.use('/user', userRoute);
 app.use('/notifications', notificationRoute);
 app.use('/decode', decodeRoute);
 app.use('/datarequest', dataRequestRoute);
+app.use('/qr', qrRoute);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, console.log(`Server running on port ${port}`));
+const httpServer = createServer(app);
+export const io = new Server(httpServer, {
+	serveClient: false,
+	cors: {
+		origin: 'http://localhost:3000',
+	},
+});
+
+// io.on('connection', socket => {
+// 	// ...
+// });
+
+//io.on('connection', onSocketConnection);
+io.on('connection', socket => {
+	console.log(`a connection was estublished ${socket.id}`);
+	//console.log(socket.handshake.query);
+	const ip = socket.handshake.query.ip;
+	console.log(socket.handshake.query.ip);
+	socket.join(ip);
+
+	socket.on('disconnect', () => {
+		socket.leave(ip);
+		console.log(`Disconnected: ${socket.id}`);
+	});
+});
+
+httpServer.listen(port, console.log(`Server running on socket port ${port}`));
+
+//app.listen(port, console.log(`Server running on port ${port}`));
