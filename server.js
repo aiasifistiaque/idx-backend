@@ -4,6 +4,9 @@ import connectDB from './db.js';
 import morgan from 'morgan';
 import cors from 'cors';
 import path from 'path';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import { onSocketConnection } from './socket/index.js';
 import credRoute from './routes/credRoute.js';
 import authRoute from './routes/authRoute.js';
 import templateRoute from './routes/templateRoute.js';
@@ -12,10 +15,8 @@ import userRoute from './routes/userRoute.js';
 import notificationRoute from './routes/notificationRoute.js';
 import decodeRoute from './routes/decodeRoute.js';
 import dataRequestRoute from './routes/datarequestRoute.js';
+import transactionRoute from './routes/transactionRoute.js';
 import qrRoute from './routes/qrRoute.js';
-import { Server } from 'socket.io';
-import { createServer } from 'http';
-import { onSocketConnection } from './socket/index.js';
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use('/user', userRoute);
 app.use('/notifications', notificationRoute);
 app.use('/decode', decodeRoute);
 app.use('/datarequest', dataRequestRoute);
+app.use('/transactions', transactionRoute);
 app.use('/qr', qrRoute);
 
 const __dirname = path.resolve();

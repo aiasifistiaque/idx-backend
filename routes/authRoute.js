@@ -4,6 +4,8 @@ import express from 'express';
 import _ from 'lodash';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import ethers from 'ethers';
 
 const router = express.Router();
 
@@ -21,6 +23,12 @@ router.post('/login', async (req, res) => {
 	const validPassword = await bcrypt.compare(req.body.password, user.password);
 	if (!validPassword) res.status(400).send('wrong password');
 
+	if (!user.wallet) {
+		const privateKey = '0x' + crypto.randomBytes(32).toString('hex');
+		user.wallet = privateKey;
+		await user.save();
+	}
+
 	try {
 		const token = user.generateAuthToken();
 		res.status(200).send(`Bearer ${token}`);
@@ -36,7 +44,13 @@ router.post('/register', async (req, res) => {
 	let user = await User.findOne({ email: req.body.email });
 	if (user) return res.status(400).send('user already registered..');
 
-	user = new User(_.pick(req.body, ['name', 'email', 'password', 'role']));
+	const privateKey = '0x' + crypto.randomBytes(32).toString('hex');
+	var wallet = new ethers.Wallet(privateKey);
+	req.body.wallet = privateKey;
+
+	user = new User(
+		_.pick(req.body, ['name', 'email', 'password', 'role', 'wallet'])
+	);
 	const salt = await bcrypt.genSalt(10);
 	user.password = await bcrypt.hash(user.password, salt);
 	try {

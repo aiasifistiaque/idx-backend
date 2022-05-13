@@ -1,15 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import Credential from '../../models/credentialsModel.js';
 
-const getCredential = asyncHandler(async (req, res) => {
+const getTransactions = asyncHandler(async (req, res) => {
 	try {
-		const credentials = await Credential.findById(req.params.id).populate([
-			{
-				path: 'issuer',
-				select: 'name email wallet',
-			},
-		]);
-
+		const credentials = await Credential.find()
+			.sort('-createdAt')
+			.select('-token')
+			.sort('-createdAt');
 		res.status(201).json(credentials);
 	} catch (e) {
 		console.log(e);
@@ -17,4 +14,4 @@ const getCredential = asyncHandler(async (req, res) => {
 	}
 });
 
-export default getCredential;
+export default getTransactions;

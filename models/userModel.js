@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
 			trim: true,
 		},
 
+		wallet: {
+			type: String,
+		},
+
 		role: { type: String, default: 'user' },
 		password: { type: String, required: true, minlength: 5, maxlength: 1024 },
 	},
